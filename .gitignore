@@ -1,0 +1,13 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+buil/
+app/build
+/.idea/
+app/src/main/java/developer/montero/michael/com/popularmovies/util/Data.java
