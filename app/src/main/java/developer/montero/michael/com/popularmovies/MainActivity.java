@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     private MovieAdapter movieAdapter;
     private static final String TAG = MainActivity.class.getName();
     private RecyclerView movieRecyclerView;
+    private ArrayList<Movie> movieArrayList = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         @Override
         protected ArrayList<Movie> doInBackground(URL... params) {
             Log.i(TAG,"doInBackground()");
-            ArrayList<Movie> movieArrayList = null;
             try {
                 String movies = NetworkUtil.getMovies(params[0]);
                 if(movies != null){
@@ -83,7 +83,8 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     @Override
     public void onMovieClick(int moviePosition) {
         Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(MOVIE, new Movie());
+        Movie movie = movieArrayList.get(moviePosition);
+        intent.putExtra(MOVIE, movie);
         startActivity(intent);
     }
 }

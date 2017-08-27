@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -52,6 +53,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         Log.i(TAG, url);
         Picasso.with(context)
                 .load(url).into(view);
+
+        holder.movieTitle.setText(movie.getTitle());
     }
     @Override
     public int getItemCount() {
@@ -66,9 +69,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 
     public class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView movieImage;
+        TextView movieTitle;
         public MovieHolder(View itemView) {
             super(itemView);
             movieImage = (ImageView)itemView.findViewById(R.id.img_movie);
+            movieTitle = (TextView)itemView.findViewById(R.id.movie_title);
         }
 
         @Override

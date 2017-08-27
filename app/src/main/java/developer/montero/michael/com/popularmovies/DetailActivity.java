@@ -14,9 +14,9 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         Bundle bundle = getIntent().getExtras();
-        Movie movie = (Movie)bundle.getSerializable(MainActivity.MOVIE);
-        if(movie != null){
-            //Show the information here!
+
+        if(bundle.containsKey(MainActivity.MOVIE)){
+            movie = (Movie)bundle.getSerializable(MainActivity.MOVIE);
         }
     }
 }
