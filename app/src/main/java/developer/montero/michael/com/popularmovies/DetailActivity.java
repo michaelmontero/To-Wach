@@ -35,7 +35,9 @@ public class DetailActivity extends AppCompatActivity {
             movie = (Movie)bundle.getSerializable(MainActivity.MOVIE);
         }
 
-        toolbar.setTitle(movie.getTitle());
+        showImage();
+    }
+    private void showImage(){
         URL uri = NetworkUtil.createImageUrl(movie.getImage());
         Picasso.with(this).load(uri.toString()).into(movieImage);
     }
