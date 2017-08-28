@@ -1,10 +1,10 @@
 package developer.montero.michael.com.popularmovies;
 
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -16,6 +16,7 @@ import developer.montero.michael.com.popularmovies.util.NetworkUtil;
 public class DetailActivity extends AppCompatActivity {
     private ImageView movieImage;
     private Movie movie;
+    private TextView releaseDate, synopsis, title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,14 +28,22 @@ public class DetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        movieImage = (ImageView)findViewById(R.id.detail_movie_image);
-
         Bundle bundle = getIntent().getExtras();
-
         if(bundle.containsKey(MainActivity.MOVIE)){
             movie = (Movie)bundle.getSerializable(MainActivity.MOVIE);
         }
+        initViews();
+    }
 
+    private void initViews(){
+        movieImage = (ImageView)findViewById(R.id.detail_movie_image);
+        releaseDate = (TextView)findViewById(R.id.detail_release_date);
+        synopsis = (TextView)findViewById(R.id.detail_synopsis);
+        title = (TextView)findViewById(R.id.detail_movie_title);
+
+        releaseDate.setText(movie.getReleaseDate());
+        synopsis.setText(movie.getSynopsis());
+        title.setText(movie.getTitle());
         showImage();
     }
     private void showImage(){
