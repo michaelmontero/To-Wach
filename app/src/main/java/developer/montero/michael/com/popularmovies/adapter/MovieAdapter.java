@@ -58,8 +58,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
     }
     @Override
     public int getItemCount() {
-        int count = (movies == null) ? 0 : movies.size();
-        return count;
+        return (movies == null) ? 0 : movies.size();
     }
 
     public void swapMovies(ArrayList<Movie> movies){
@@ -74,6 +73,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
             super(itemView);
             movieImage = (ImageView)itemView.findViewById(R.id.img_movie);
             movieTitle = (TextView)itemView.findViewById(R.id.movie_title);
+            itemView.setOnClickListener(this);
         }
 
         @Override
