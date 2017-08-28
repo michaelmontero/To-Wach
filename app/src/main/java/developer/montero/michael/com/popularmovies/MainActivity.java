@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
 
         movieAdapter = new MovieAdapter(this, null, this);

@@ -23,12 +23,11 @@
                     android:id="@+id/detail_movie_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@color/cardview_shadow_start_color"
                     app:layout_collapseMode="parallax"
                     android:scaleType="fitXY"
                   />
 
-
+                <include layout="@layout/toolbar"/>
 
             </android.support.design.widget.CollapsingToolbarLayout>
 
