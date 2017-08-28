@@ -44,13 +44,12 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         }else{
             layoutManager = new GridLayoutManager(this,3);
         }
-     //   layoutManager.set
         movieRecyclerView.setLayoutManager(layoutManager);
         movieRecyclerView.setHasFixedSize(true);
 
         movieRecyclerView.setAdapter(movieAdapter);
 
-        URL url = NetworkUtil.createUrl("popularity");
+        URL url = NetworkUtil.createUrl(getString(R.string.filter_popularity));
         new NetworkTask().execute(url);
     }
 
