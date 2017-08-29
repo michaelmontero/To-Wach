@@ -1,5 +1,6 @@
 package developer.montero.michael.com.popularmovies;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,9 +18,10 @@ public class SettingActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(R.id.setting_container, new SettingFragment())
                 .commit();
-
-        if(getSupportActionBar() != null){
-            getSupportActionBar().setTitle(getString(R.string.configurar));
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getString(R.string.configurar));
         }
     }
 }
