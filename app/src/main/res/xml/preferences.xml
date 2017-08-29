@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
-        android:dependency="pref_sync"
         android:key="pref_syncConnectionType"
-        android:title="@string/preference__filter"
+        android:title="@string/preference_filter"
         android:dialogTitle="@string/preference_filter_title"
         android:entries="@array/preferences_filter_entries"
         android:entryValues="@array/preferences_filter_values"

@@ -2,9 +2,10 @@
     <string name="app_name">PopularMovies</string>
     <string name="filter_popularity">popularity</string>
     <string name="filter_top_rated">rating</string>
-    <string name="preference__filter">Ordenar</string>
-    <string name="preference_filter_title">Ordenar pelicular por:</string>
-
+    <string name="preference_filter">Ordenar peliculas</string>
+    <string name="preference_filter_title">Ordenar peliculas por:</string>
+    <string name="setting">Configurar</string>
+    <string name="configurar">Preferences</string>
 
     <string-array name="preferences_filter_entries">
         <item>Popularity</item>
@@ -16,6 +17,5 @@
         <item>Top rated</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
