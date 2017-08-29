@@ -12,16 +12,17 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.mToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
 
         getFragmentManager().beginTransaction()
                 .replace(R.id.setting_container, new SettingFragment())
                 .commit();
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(getString(R.string.configurar));
+
         }
     }
 }
