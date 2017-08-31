@@ -6,6 +6,8 @@
     <string name="preference_filter_title">Ordenar peliculas por:</string>
     <string name="setting">Configurar</string>
     <string name="configurar">Preferencia</string>
+    <string name="errorMessage_unespexted">Ha ocurrido un error inesperado. Favor volver a intentar...</string>
+    <string name="errorMessage_noInternetConnection">No se ha detectado conexion a internet...favor verificar.</string>
 
     <string-array name="preferences_filter_entries">
         <item>Popularidad</item>

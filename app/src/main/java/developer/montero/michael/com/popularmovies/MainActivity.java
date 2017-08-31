@@ -11,6 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.json.JSONException;
 
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import developer.montero.michael.com.popularmovies.adapter.MovieAdapter;
 import developer.montero.michael.com.popularmovies.interfaces.MovieClickListener;
 import developer.montero.michael.com.popularmovies.model.Movie;
+import developer.montero.michael.com.popularmovies.util.Commons;
 import developer.montero.michael.com.popularmovies.util.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MovieClickListener {
@@ -29,10 +33,15 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     private static final String TAG = MainActivity.class.getName();
     private RecyclerView movieRecyclerView;
     private ArrayList<Movie> movieArrayList = null;
+    private ProgressBar progressBar;
+    private TextView tvErrorMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        tvErrorMessage = (TextView)findViewById(R.id.tv_errorMessage);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
@@ -51,22 +60,39 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
 
         movieRecyclerView.setAdapter(movieAdapter);
 
-        URL url = NetworkUtil.createUrl(getString(R.string.filter_popularity));
-        new NetworkTask().execute(url);
+        if(Commons.isConnected(this)){
+            URL url = NetworkUtil.createUrl(getString(R.string.filter_popularity));
+            new NetworkTask().execute(url);
+        }else{
+            showError(getString(R.string.errorMessage_noInternetConnection));
+        }
     }
 
+    private void showProgress(){
+        progressBar.setVisibility(View.VISIBLE);
+        movieRecyclerView.setVisibility(View.INVISIBLE);
+    }
+    private void showData(){
+        progressBar.setVisibility(View.INVISIBLE);
+        movieRecyclerView.setVisibility(View.VISIBLE);
+    }
+    private void showError(String text){
+        progressBar.setVisibility(View.INVISIBLE);
+        movieRecyclerView.setVisibility(View.INVISIBLE);
+        tvErrorMessage.setVisibility(View.VISIBLE);
+        tvErrorMessage.setText(text);
+    }
 
     private class NetworkTask extends AsyncTask<URL,Void, ArrayList<Movie>>{
 
         @Override
         protected void onPreExecute() {
-            Log.i(TAG,"onPreExecute()");
+            showProgress();
             super.onPreExecute();
         }
 
         @Override
         protected ArrayList<Movie> doInBackground(URL... params) {
-            Log.i(TAG,"doInBackground()");
             try {
                 String movies = NetworkUtil.getMovies(params[0]);
                 if(movies != null){
@@ -74,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
+                showError(getString(R.string.errorMessage_unespexted));
             }
             return movieArrayList;
         }
@@ -81,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         @Override
         protected void onPostExecute(ArrayList<Movie> movies) {
             super.onPostExecute(movies);
+            showData();
             movieAdapter.swapMovies(movies);
         }
     }

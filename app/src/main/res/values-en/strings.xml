@@ -7,6 +7,8 @@
     <string name="preference_filter_title">Sort movies by:</string>
     <string name="setting">Settings</string>
     <string name="configurar">Preference</string>
+    <string name="errorMessage_unespexted">An unexpected error has occurred. Please try again ...</string>
+    <string name="errorMessage_noInternetConnection">No internet connection detected ... please check.</string>
 
     <string-array name="preferences_filter_entries">
         <item>Popularity</item>
