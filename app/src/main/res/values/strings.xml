@@ -1,21 +1,19 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
+    <string name="app_name">To Watch</string>
     <string name="filter_popularity">popularity</string>
     <string name="filter_top_rated">rating</string>
     <string name="preference_filter">Ordenar peliculas</string>
     <string name="preference_filter_title">Ordenar peliculas por:</string>
     <string name="setting">Configurar</string>
-    <string name="configurar">Preferences</string>
+    <string name="configurar">Preferencia</string>
 
     <string-array name="preferences_filter_entries">
-        <item>Popularity</item>
-        <item>Top rated</item>
+        <item>Popularidad</item>
+        <item>Mas valoradas</item>
     </string-array>
 
     <string-array name="preferences_filter_values">
-        <item>Popularity</item>
-        <item>Top rated</item>
+        <item>popularity</item>
+        <item>vote_average</item>
     </string-array>
-
-
 </resources>

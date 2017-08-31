@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">To Watch</string>
+    <string name="filter_popularity">popularity</string>
+    <string name="filter_top_rated">vote_average</string>
+    <string name="preference_filter">Sort movies</string>
+    <string name="preference_filter_title">Sort movies by:</string>
+    <string name="setting">Settings</string>
+    <string name="configurar">Preference</string>
+
+    <string-array name="preferences_filter_entries">
+        <item>Popularity</item>
+        <item>Top rated</item>
+    </string-array>
+
+    <string-array name="preferences_filter_values">
+        <item>popularity</item>
+        <item>vote_average</item>
+    </string-array>
+</resources>
