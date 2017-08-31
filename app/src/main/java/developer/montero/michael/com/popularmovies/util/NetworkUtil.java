@@ -21,10 +21,14 @@ import developer.montero.michael.com.popularmovies.model.Movie;
 
 public class NetworkUtil {
 
-    private static final String BASE_URL = "http://api.themoviedb.org/3/movie/popular";
+    private static final String BASE_URL = "http://api.themoviedb.org/3/movie/";
+
+    private final static String UPCOMING = "upcoming";
+    private final static String POPULARIRTY = "popular";
+    private final static String TOP_RATED = "top_rated";
 
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
-   private static final String IMAGE_SIZE = "w780";
+    private static final String IMAGE_SIZE = "w780";
 
     final static String SORT_PAMAM = "sort_by";
 
@@ -33,7 +37,7 @@ public class NetworkUtil {
         URL url = null;
         Uri.Builder builder = Uri.parse(BASE_URL)
                 .buildUpon()
-                .appendQueryParameter(SORT_PAMAM, sortBy)
+                .appendPath(sortBy)
                 .appendQueryParameter("api_key",Data.API_KEY);
         Uri movieUrl = builder.build();
         try{

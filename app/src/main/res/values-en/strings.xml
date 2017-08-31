@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">To Watch</string>
-    <string name="filter_popularity">popularity</string>
-    <string name="filter_top_rated">vote_average</string>
+    <string name="filter_popularity">popular</string>
+    <string name="filter_top_rated">top_rated</string>
     <string name="preference_filter">Sort movies</string>
     <string name="preference_filter_title">Sort movies by:</string>
     <string name="setting">Settings</string>
-    <string name="configurar">Preference</string>
+    <string name="configurar">Preferences</string>
     <string name="errorMessage_unespexted">An unexpected error has occurred. Please try again ...</string>
     <string name="errorMessage_noInternetConnection">No internet connection detected ... please check.</string>
 
@@ -16,7 +16,7 @@
     </string-array>
 
     <string-array name="preferences_filter_values">
-        <item>popularity</item>
-        <item>vote_average</item>
+        <item>popular</item>
+        <item>top_rated</item>
     </string-array>
 </resources>

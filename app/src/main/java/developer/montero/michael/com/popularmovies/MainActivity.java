@@ -1,8 +1,10 @@
 package developer.montero.michael.com.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -35,10 +37,15 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     private ArrayList<Movie> movieArrayList = null;
     private ProgressBar progressBar;
     private TextView tvErrorMessage;
+    private SharedPreferences preferece;
+    private String DEFAULT_FILTRER = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DEFAULT_FILTRER = getString(R.string.filter_popularity);
 
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         tvErrorMessage = (TextView)findViewById(R.id.tv_errorMessage);
@@ -61,7 +68,9 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         movieRecyclerView.setAdapter(movieAdapter);
 
         if(Commons.isConnected(this)){
-            URL url = NetworkUtil.createUrl(getString(R.string.filter_popularity));
+           preferece= PreferenceManager.getDefaultSharedPreferences(this);
+            String filter = preferece.getString("preferences_filter", DEFAULT_FILTRER);
+            URL url = NetworkUtil.createUrl(filter);
             new NetworkTask().execute(url);
         }else{
             showError(getString(R.string.errorMessage_noInternetConnection));

@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">To Watch</string>
-    <string name="filter_popularity">popularity</string>
-    <string name="filter_top_rated">rating</string>
+    <string name="filter_popularity">popular</string>
+    <string name="filter_top_rated">top_rated</string>
     <string name="preference_filter">Ordenar peliculas</string>
     <string name="preference_filter_title">Ordenar peliculas por:</string>
     <string name="setting">Configurar</string>
-    <string name="configurar">Preferencia</string>
+    <string name="configurar">Preferencias</string>
     <string name="errorMessage_unespexted">Ha ocurrido un error inesperado. Favor volver a intentar...</string>
     <string name="errorMessage_noInternetConnection">No se ha detectado conexion a internet...favor verificar.</string>
 
