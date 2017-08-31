@@ -1,16 +1,19 @@
 package developer.montero.michael.com.popularmovies;
 
+import android.app.LoaderManager;
+import android.content.AsyncTaskLoader;
+import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,16 +32,17 @@ import developer.montero.michael.com.popularmovies.model.Movie;
 import developer.montero.michael.com.popularmovies.util.Commons;
 import developer.montero.michael.com.popularmovies.util.NetworkUtil;
 
-public class MainActivity extends AppCompatActivity implements MovieClickListener {
+public class MainActivity extends AppCompatActivity implements MovieClickListener, LoaderManager.LoaderCallbacks<ArrayList<Movie>> {
     final static String MOVIE = "movie";
     private MovieAdapter movieAdapter;
     private static final String TAG = MainActivity.class.getName();
     private RecyclerView movieRecyclerView;
     private ArrayList<Movie> movieArrayList = null;
-    private ProgressBar progressBar;
+    public ProgressBar progressBar;
     private TextView tvErrorMessage;
     private SharedPreferences preferece;
     private String DEFAULT_FILTRER = null;
+    private LoaderManager loaderManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         Toolbar toolbar = (Toolbar)findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
 
+        loaderManager = getLoaderManager();
+
         movieAdapter = new MovieAdapter(this, null, this);
 
         movieRecyclerView = (RecyclerView)findViewById(R.id.main_movie_recyclerview);
@@ -66,12 +72,10 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         movieRecyclerView.setHasFixedSize(true);
 
         movieRecyclerView.setAdapter(movieAdapter);
+        preferece= PreferenceManager.getDefaultSharedPreferences(this);
 
         if(Commons.isConnected(this)){
-           preferece= PreferenceManager.getDefaultSharedPreferences(this);
-            String filter = preferece.getString("preferences_filter", DEFAULT_FILTRER);
-            URL url = NetworkUtil.createUrl(filter);
-            new NetworkTask().execute(url);
+          loaderManager.initLoader(0,null, this);
         }else{
             showError(getString(R.string.errorMessage_noInternetConnection));
         }
@@ -92,34 +96,23 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         tvErrorMessage.setText(text);
     }
 
-    private class NetworkTask extends AsyncTask<URL,Void, ArrayList<Movie>>{
+    @Override
+    public Loader<ArrayList<Movie>> onCreateLoader(int id, Bundle args) {
+        String filter = preferece.getString("preferences_filter", DEFAULT_FILTRER);
+        URL url = NetworkUtil.createUrl(filter);
+        return new MovieLoader(this,progressBar, url);
+    }
 
-        @Override
-        protected void onPreExecute() {
-            showProgress();
-            super.onPreExecute();
-        }
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> data) {
+        showData();
+        movieArrayList = data;
+        movieAdapter.swapMovies(data);
+    }
 
-        @Override
-        protected ArrayList<Movie> doInBackground(URL... params) {
-            try {
-                String movies = NetworkUtil.getMovies(params[0]);
-                if(movies != null){
-                    movieArrayList = NetworkUtil.convertJsonToMovieList(movies);
-                }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-                showError(getString(R.string.errorMessage_unespexted));
-            }
-            return movieArrayList;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Movie> movies) {
-            super.onPostExecute(movies);
-            showData();
-            movieAdapter.swapMovies(movies);
-        }
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Movie>> loader) {
+        movieAdapter.swapMovies(null);
     }
 
     @Override
@@ -146,5 +139,38 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         }
 
         return true;
+    }
+}
+
+class MovieLoader extends AsyncTaskLoader<ArrayList<Movie>>{
+
+    private URL param;
+    private ArrayList<Movie> movieArrayList;
+    ProgressBar progressBar;
+    public MovieLoader(Context context,ProgressBar progressBar, URL param) {
+        super(context);
+        this.param = param;
+        this.progressBar = progressBar;
+    }
+
+    @Override
+    protected void onStartLoading() {
+        super.onStartLoading();
+        progressBar.setVisibility(View.VISIBLE);
+        forceLoad();
+    }
+
+    @Override
+    public ArrayList<Movie> loadInBackground() {
+        try {
+            String movies = NetworkUtil.getMovies(param);
+            if(movies != null){
+                movieArrayList = NetworkUtil.convertJsonToMovieList(movies);
+            }
+        } catch (IOException | JSONException e) {
+            movieArrayList = null;
+            e.printStackTrace();
+        }
+        return movieArrayList;
     }
 }
