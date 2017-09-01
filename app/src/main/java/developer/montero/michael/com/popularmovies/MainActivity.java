@@ -100,7 +100,12 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     public Loader<ArrayList<Movie>> onCreateLoader(int id, Bundle args) {
         String filter = preferece.getString("preferences_filter", DEFAULT_FILTRER);
         URL url = NetworkUtil.createUrl(filter);
-        return new MovieLoader(this,progressBar, url);
+        try{
+            return new MovieLoader(this,progressBar, url);
+        }catch (Exception e){
+            showError(getString(R.string.errorMessage_unespexted));
+            return null;
+        }
     }
 
     @Override
