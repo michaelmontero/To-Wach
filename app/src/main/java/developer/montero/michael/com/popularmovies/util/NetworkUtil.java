@@ -28,7 +28,7 @@ public class NetworkUtil {
     private final static String TOP_RATED = "top_rated";
 
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
-    private static final String IMAGE_SIZE = "w780";
+    private static final String IMAGE_SIZE = "w185";
 
     final static String SORT_PAMAM = "sort_by";
 
