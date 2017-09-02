@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -101,7 +102,12 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         String filter = preferece.getString("preferences_filter", DEFAULT_FILTRER);
         URL url = NetworkUtil.createUrl(filter);
         try{
-            return new MovieLoader(this,progressBar, url);
+               return new MovieLoader(this, url) {
+                    @Override
+                    public ArrayList<Movie> loadInBackground() {
+                        return super.loadInBackground();
+                    }
+                };
         }catch (Exception e){
             showError(getString(R.string.errorMessage_unespexted));
             return null;
@@ -145,37 +151,37 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
 
         return true;
     }
-}
 
-class MovieLoader extends AsyncTaskLoader<ArrayList<Movie>>{
+    public abstract class MovieLoader extends AsyncTaskLoader<ArrayList<Movie>>{
 
-    private URL param;
-    private ArrayList<Movie> movieArrayList;
-    ProgressBar progressBar;
-    public MovieLoader(Context context,ProgressBar progressBar, URL param) {
-        super(context);
-        this.param = param;
-        this.progressBar = progressBar;
-    }
-
-    @Override
-    protected void onStartLoading() {
-        super.onStartLoading();
-        progressBar.setVisibility(View.VISIBLE);
-        forceLoad();
-    }
-
-    @Override
-    public ArrayList<Movie> loadInBackground() {
-        try {
-            String movies = NetworkUtil.getMovies(param);
-            if(movies != null){
-                movieArrayList = NetworkUtil.convertJsonToMovieList(movies);
-            }
-        } catch (IOException | JSONException e) {
-            movieArrayList = null;
-            e.printStackTrace();
+        private URL param;
+        private ArrayList<Movie> movieArrayList;
+        public MovieLoader(Context context,URL param) {
+            super(context);
+            this.param = param;
         }
-        return movieArrayList;
+
+        @Override
+        protected void onStartLoading() {
+            super.onStartLoading();
+            showProgress();
+            forceLoad();
+        }
+
+        @Override
+        public ArrayList<Movie> loadInBackground() {
+            try {
+                String movies = NetworkUtil.getMovies(param);
+                if(movies != null){
+                    movieArrayList = NetworkUtil.convertJsonToMovieList(movies);
+                }
+            } catch (IOException | JSONException e) {
+                movieArrayList = null;
+                e.printStackTrace();
+            }
+            return movieArrayList;
+        }
     }
+
 }
+
