@@ -1,5 +1,8 @@
 package developer.montero.michael.com.popularmovies;
 
+import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
@@ -19,14 +22,15 @@ import developer.montero.michael.com.popularmovies.util.NetworkUtil;
 public class DetailActivity extends AppCompatActivity {
     private ImageView movieImage;
     private Movie movie;
+    private Toolbar toolbar;
     private TextView releaseDate, synopsis, title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-         Toolbar toolbar = (Toolbar)findViewById(R.id.mToolbar);
-        setSupportActionBar(toolbar);
+         toolbar = (Toolbar)findViewById(R.id.mToolbar);
+         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -53,13 +57,16 @@ public class DetailActivity extends AppCompatActivity {
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
             int scrollRange = -1;
+
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                toolbar.setBackgroundColor(Color.TRANSPARENT);
                 if (scrollRange == -1){
                     scrollRange=appBarLayout.getTotalScrollRange();
                 }
                 if((scrollRange + verticalOffset) == 0){
                     collapsingToolbarLayout.setTitle(movie.getTitle());
+                    toolbar.setBackgroundColor(Color.parseColor("#3F51B5"));
                     isShow = true;
                 }else if(isShow){
                     collapsingToolbarLayout.setTitle("");
@@ -67,7 +74,6 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void initViews(){
@@ -81,8 +87,9 @@ public class DetailActivity extends AppCompatActivity {
         title.setText(movie.getTitle());
         showImage();
     }
+
     private void showImage(){
         URL uri = NetworkUtil.createImageUrl(movie.getImage());
-        Picasso.with(this).load(uri.toString()).into(movieImage);
+        Picasso.with(this).load(uri.toString()).fit().into(movieImage);
     }
 }
