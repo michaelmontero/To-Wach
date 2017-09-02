@@ -48,6 +48,6 @@ public class DetailActivity extends AppCompatActivity {
     }
     private void showImage(){
         URL uri = NetworkUtil.createImageUrl(movie.getImage());
-        Picasso.with(this).load(uri.toString()).into(movieImage);
+        Picasso.with(this).load(uri.toString()).fit().into(movieImage);
     }
 }
