@@ -1,5 +1,8 @@
 package developer.montero.michael.com.popularmovies;
 
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -22,10 +25,13 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.mToolbar);
+         Toolbar toolbar = (Toolbar)findViewById(R.id.mToolbar);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("");
         }
 
         Bundle bundle = getIntent().getExtras();
@@ -33,6 +39,35 @@ public class DetailActivity extends AppCompatActivity {
             movie = (Movie)bundle.getSerializable(MainActivity.MOVIE);
         }
         initViews();
+        collpaseToolBar();
+    }
+
+    private void collpaseToolBar(){
+            final CollapsingToolbarLayout collapsingToolbarLayout =
+                    (CollapsingToolbarLayout)findViewById(R.id.collpasingToolBar);
+            collapsingToolbarLayout.setTitle("");
+
+        AppBarLayout appBarLayout =
+                (AppBarLayout)findViewById(R.id.appBarLayout);
+        appBarLayout.setExpanded(true);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1){
+                    scrollRange=appBarLayout.getTotalScrollRange();
+                }
+                if((scrollRange + verticalOffset) == 0){
+                    collapsingToolbarLayout.setTitle(movie.getTitle());
+                    isShow = true;
+                }else if(isShow){
+                    collapsingToolbarLayout.setTitle("");
+                    isShow = false;
+                }
+            }
+        });
+
     }
 
     private void initViews(){
@@ -48,6 +83,6 @@ public class DetailActivity extends AppCompatActivity {
     }
     private void showImage(){
         URL uri = NetworkUtil.createImageUrl(movie.getImage());
-        Picasso.with(this).load(uri.toString()).fit().into(movieImage);
+        Picasso.with(this).load(uri.toString()).into(movieImage);
     }
 }
