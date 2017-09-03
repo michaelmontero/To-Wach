@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
                     movieArrayList = NetworkUtil.convertJsonToMovieList(movies);
                 }
             } catch (IOException | JSONException e) {
+                showError(getString(R.string.errorMessage_unespexted));
                 movieArrayList = null;
                 e.printStackTrace();
             }

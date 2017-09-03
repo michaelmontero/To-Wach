@@ -9,6 +9,10 @@
     <string name="configurar">Preferences</string>
     <string name="errorMessage_unespexted">An unexpected error has occurred. Please try again ...</string>
     <string name="errorMessage_noInternetConnection">No internet connection detected ... please check.</string>
+    <string name="detail_movieRating">%.2f/10</string>
+    <string name="movie_information">General informaction</string>
+    <string name="detail_release_date">Release date</string>
+    <string name="rating">Rating</string>
 
     <string-array name="preferences_filter_entries">
         <item>Popularity</item>

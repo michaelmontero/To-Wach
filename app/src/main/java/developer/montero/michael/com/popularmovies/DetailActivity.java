@@ -5,11 +5,13 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -23,7 +25,7 @@ public class DetailActivity extends AppCompatActivity {
     private ImageView movieImage;
     private Movie movie;
     private Toolbar toolbar;
-    private TextView releaseDate, synopsis, title;
+    private TextView releaseDate, synopsis, title,rating;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,15 +78,22 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     private void initViews(){
         movieImage = (ImageView)findViewById(R.id.detail_movie_image);
         releaseDate = (TextView)findViewById(R.id.detail_release_date);
         synopsis = (TextView)findViewById(R.id.detail_synopsis);
-        title = (TextView)findViewById(R.id.detail_movie_title);
-
+        rating = (TextView)findViewById(R.id.detail_rating);
+       title = (TextView)findViewById(R.id.detail_movie_title);
+//
         releaseDate.setText(movie.getReleaseDate());
         synopsis.setText(movie.getSynopsis());
         title.setText(movie.getTitle());
+        rating.setText(String.format(getString(R.string.detail_movieRating),movie.getRating()));
         showImage();
     }
 
