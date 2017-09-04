@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="developer.montero.michael.com.popularmovies.DetailActivity"
+    android:background="@color/colorSecundary"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
@@ -49,41 +50,27 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/movie_information"
-                    android:textSize="22sp"
-                    android:fontFamily="roboto"
-                    android:textColor="#000"/>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardElevation="5dp"
-                android:padding="5dp"
-                app:cardUseCompatPadding="true">
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:text="@string/movie_information"-->
+                    <!--android:textSize="22sp"-->
+                    <!--android:fontFamily="roboto"-->
+                    <!--android:textColor="#000"/>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
+                     <TextView
                             android:id="@+id/detail_movie_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
                             android:layout_margin="5dp"
                             android:textSize="24sp"
-                            android:textColor="#000"/>
-                    </LinearLayout>
+                            android:textColor="@color/textColor"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -96,7 +83,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="roboto"
                             android:textSize="18sp"
-                            android:textColor="#000"
+                            android:textColor="@color/textColor"
                             android:text="@string/detail_release_date"/>
 
                         <TextView
@@ -105,6 +92,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:textSize="16sp"
+                            android:textColor="@color/textColor"
                             android:layout_marginTop="10dp"/>
 
                     </LinearLayout>
@@ -121,7 +109,7 @@
                             android:text="@string/rating"
                             android:fontFamily="roboto"
                             android:textSize="18sp"
-                            android:textColor="#000"
+                            android:textColor="@color/textColor"
                             android:layout_marginLeft="10dp"/>
 
                         <TextView
@@ -129,13 +117,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
+                            android:textColor="@color/textColor"
                             android:textSize="16sp"/>
                     </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#dadada"
+                        android:background="#fff"
                         android:layout_marginTop="8dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp" />
@@ -151,11 +140,10 @@
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
                             android:padding="10dp"
+                            android:textColor="@color/textColor"
                             />
                     </LinearLayout>
-
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

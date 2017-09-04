@@ -68,7 +68,7 @@ public class DetailActivity extends AppCompatActivity {
                 }
                 if((scrollRange + verticalOffset) == 0){
                     collapsingToolbarLayout.setTitle(movie.getTitle());
-                    toolbar.setBackgroundColor(Color.parseColor("#3F51B5"));
+                    toolbar.setBackgroundColor(Color.parseColor("#1a1a1a"));
                     isShow = true;
                 }else if(isShow){
                     collapsingToolbarLayout.setTitle("");
