@@ -144,12 +144,15 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_setting:
-                Intent intent = new Intent(this, SettingActivity.class);
-                startActivity(intent);
+                showSortDialog();
                 break;
         }
 
         return true;
+    }
+
+    private void showSortDialog(){
+
     }
 
     public abstract class MovieLoader extends AsyncTaskLoader<ArrayList<Movie>>{
