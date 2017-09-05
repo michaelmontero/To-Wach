@@ -91,12 +91,12 @@ public class DetailActivity extends AppCompatActivity {
         synopsis = (TextView)findViewById(R.id.detail_synopsis);
         rating = (RatingBar) findViewById(R.id.detail_rating);
        title = (TextView)findViewById(R.id.detail_movie_title);
-//
+
         releaseDate.setText(movie.getReleaseDate());
         synopsis.setText(movie.getSynopsis());
         title.setText(movie.getTitle());
-        rating.setRating(6);
-      //  rating.setText(String.format(getString(R.string.detail_movieRating),movie.getRating()));
+        Integer mRating= movie.getRating().intValue();
+        rating.setRating(mRating);
         showImage();
     }
 
