@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">To Watch</string>
     <string name="filter_popularity">popular</string>
+    <string name="filter_by">Ordenar por</string>
     <string name="filter_top_rated">top_rated</string>
     <string name="preference_filter">Ordenar peliculas</string>
     <string name="preference_filter_title">Ordenar peliculas por:</string>
@@ -13,6 +14,7 @@
     <string name="detail_release_date">Fecha de publicacion</string>
     <string name="rating">Valoracion</string>
     <string name="popular">Popularidad</string>
+    <string name="languaje">es</string>
 
     <string-array name="key">
         <item>@string/rating</item>

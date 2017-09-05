@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -108,14 +106,16 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     @Override
     public Loader<ArrayList<Movie>> onCreateLoader(int id, Bundle args) {
         String filter = preferece.getString(SORT_BY, DEFAULT_FILTRER);
-        URL url = NetworkUtil.createUrl(filter);
+        String languaje = getString(R.string.languaje);
+        URL url = NetworkUtil.createUrl(filter,languaje);
+
         try{
                return new MovieLoader(this, url) {
                     @Override
                     public ArrayList<Movie> loadInBackground() {
                         return super.loadInBackground();
                     }
-                };
+               };
         }catch (Exception e){
             showError(getString(R.string.errorMessage_unespexted));
             return null;
@@ -156,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
                 showSortDialog(selected);
                 break;
         }
-
         return true;
     }
 
@@ -215,4 +214,3 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     }
 
 }
-
