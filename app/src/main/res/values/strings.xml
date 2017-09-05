@@ -12,4 +12,15 @@
     <string name="movie_information">Informacion general</string>
     <string name="detail_release_date">Fecha de publicacion</string>
     <string name="rating">Valoracion</string>
+    <string name="popular">Popularidad</string>
+
+    <string-array name="key">
+        <item>@string/rating</item>
+        <item>@string/popular</item>
+    </string-array>
+
+    <string-array name="valor">
+        <item>@string/filter_top_rated</item>
+        <item>@string/filter_popularity</item>
+    </string-array>
 </resources>

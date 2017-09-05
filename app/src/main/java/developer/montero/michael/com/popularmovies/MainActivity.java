@@ -1,8 +1,10 @@
 package developer.montero.michael.com.popularmovies;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     private SharedPreferences preferece;
     private String DEFAULT_FILTRER = null;
     private LoaderManager loaderManager;
+    private AlertDialog alertDialog;
+    private static final String SORT_BY = "SORT_BY";
+    private static final int SELECTED = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +81,15 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         preferece= PreferenceManager.getDefaultSharedPreferences(this);
 
         if(Commons.isConnected(this)){
-          loaderManager.initLoader(0,null, this);
+            initLoader();
         }else{
             showError(getString(R.string.errorMessage_noInternetConnection));
         }
     }
 
+    private void initLoader(){
+        loaderManager.initLoader(0,null, this);
+    }
     private void showProgress(){
         progressBar.setVisibility(View.VISIBLE);
         movieRecyclerView.setVisibility(View.INVISIBLE);
@@ -99,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
 
     @Override
     public Loader<ArrayList<Movie>> onCreateLoader(int id, Bundle args) {
-        String filter = preferece.getString("preferences_filter", DEFAULT_FILTRER);
+        String filter = preferece.getString(SORT_BY, DEFAULT_FILTRER);
         URL url = NetworkUtil.createUrl(filter);
         try{
                return new MovieLoader(this, url) {
@@ -144,15 +152,34 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_setting:
-                showSortDialog();
+                int selected = preferece.getInt("selectedFilter", -1);
+                showSortDialog(selected);
                 break;
         }
 
         return true;
     }
 
-    private void showSortDialog(){
+    private void showSortDialog(int selected){
+        String [] filterOptions = getResources().getStringArray(R.array.key);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.preference_filter_title));
+        builder.setSingleChoiceItems(filterOptions,selected, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int index) {
+                String [] filterValues = getResources().getStringArray(R.array.valor);
 
+                SharedPreferences.Editor editor = preferece.edit();
+                editor.putString(SORT_BY, filterValues[index]);
+                editor.putInt("selectedFilter", index);
+                editor.apply();
+
+                loaderManager.restartLoader(0,null, MainActivity.this);
+                alertDialog.cancel();
+            }
+        });
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
     public abstract class MovieLoader extends AsyncTaskLoader<ArrayList<Movie>>{

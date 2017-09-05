@@ -38,7 +38,7 @@ public class NetworkUtil {
         Uri.Builder builder = Uri.parse(BASE_URL)
                 .buildUpon()
                 .appendPath(sortBy)
-                .appendQueryParameter("api_key",Data.API_KEY);
+                .appendQueryParameter("api_key","6a2a9e60947182ae70463ff21155c447");
         Uri movieUrl = builder.build();
         try{
             url = new URL(movieUrl.toString());
