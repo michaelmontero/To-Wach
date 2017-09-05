@@ -26,6 +26,7 @@ public class NetworkUtil {
     private final static String UPCOMING = "upcoming";
     private final static String POPULARIRTY = "popular";
     private final static String TOP_RATED = "top_rated";
+    private final static String LANGUAJE = "language";
 
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_SIZE = "w185";
@@ -33,12 +34,13 @@ public class NetworkUtil {
     final static String SORT_PAMAM = "sort_by";
 
 
-    public static URL createUrl(String sortBy){
+    public static URL createUrl(String sortBy, String languaje){
         URL url = null;
         Uri.Builder builder = Uri.parse(BASE_URL)
                 .buildUpon()
                 .appendPath(sortBy)
-                .appendQueryParameter("api_key",Data.API_KEY);
+                .appendQueryParameter("api_key",Data.API_KEY)
+                .appendQueryParameter(LANGUAJE, languaje);
         Uri movieUrl = builder.build();
         try{
             url = new URL(movieUrl.toString());

@@ -112,13 +112,13 @@
                             android:textColor="@color/textColor"
                             android:layout_marginLeft="10dp"/>
 
-                        <TextView
+                        <RatingBar
                             android:id="@+id/detail_rating"
+                            android:progressDrawable="@drawable/movie_rating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:textColor="@color/textColor"
-                            android:textSize="16sp"/>
+                            android:isIndicator="true"
+                            android:numStars="10"/>
                     </LinearLayout>
 
                     <View
