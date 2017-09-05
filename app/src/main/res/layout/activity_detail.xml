@@ -103,19 +103,11 @@
                         android:orientation="horizontal"
                         android:weightSum="10">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/rating"
-                            android:fontFamily="roboto"
-                            android:textSize="18sp"
-                            android:textColor="@color/textColor"
-                            android:layout_marginLeft="10dp"/>
-
                         <RatingBar
                             android:id="@+id/detail_rating"
                             android:progressDrawable="@drawable/movie_rating"
                             android:layout_width="wrap_content"
+                            android:layout_marginLeft="10dp"
                             android:layout_height="wrap_content"
                             android:isIndicator="true"
                             android:numStars="10"/>
