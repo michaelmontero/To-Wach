@@ -35,8 +35,8 @@ import developer.montero.michael.com.popularmovies.util.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MovieClickListener, LoaderManager.LoaderCallbacks<ArrayList<Movie>> {
     final static String MOVIE = "movie";
+    private static final String MOVIE_URL = "MOVIE_URL";
     private MovieAdapter movieAdapter;
-    private static final String TAG = MainActivity.class.getName();
     private RecyclerView movieRecyclerView;
     private ArrayList<Movie> movieArrayList = null;
     public ProgressBar progressBar;
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     private LoaderManager loaderManager;
     private AlertDialog alertDialog;
     private static final String SORT_BY = "SORT_BY";
-    private static final int SELECTED = -1;
+    private static final int MOVIE_LOADER = 22;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,20 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     }
 
     private void initLoader(){
-        loaderManager.initLoader(0,null, this);
+        Loader<Object> searchLoader = loaderManager.getLoader(MOVIE_LOADER);
+
+        String filter = preferece.getString(SORT_BY, DEFAULT_FILTRER);
+        String languaje = getString(R.string.languaje);
+        URL url = NetworkUtil.createUrl(filter,languaje);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(MOVIE_URL, url.toString());
+
+        if(searchLoader ==null){
+            loaderManager.initLoader(MOVIE_LOADER,bundle, this);
+        }else{
+            loaderManager.restartLoader(MOVIE_LOADER,bundle, this);
+        }
     }
     private void showProgress(){
         progressBar.setVisibility(View.VISIBLE);
@@ -105,11 +118,8 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
 
     @Override
     public Loader<ArrayList<Movie>> onCreateLoader(int id, Bundle args) {
-        String filter = preferece.getString(SORT_BY, DEFAULT_FILTRER);
-        String languaje = getString(R.string.languaje);
-        URL url = NetworkUtil.createUrl(filter,languaje);
-
         try{
+               URL url =new URL(args.getString(MOVIE_URL));
                return new MovieLoader(this, url) {
                     @Override
                     public ArrayList<Movie> loadInBackground() {
@@ -173,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
                 editor.putInt("selectedFilter", index);
                 editor.apply();
 
-                loaderManager.restartLoader(0,null, MainActivity.this);
+                initLoader();
                 alertDialog.cancel();
             }
         });

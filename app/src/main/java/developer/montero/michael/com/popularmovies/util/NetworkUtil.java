@@ -31,15 +31,12 @@ public class NetworkUtil {
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_SIZE = "w185";
 
-    final static String SORT_PAMAM = "sort_by";
-
-
     public static URL createUrl(String sortBy, String languaje){
         URL url = null;
         Uri.Builder builder = Uri.parse(BASE_URL)
                 .buildUpon()
                 .appendPath(sortBy)
-                .appendQueryParameter("api_key","6a2a9e60947182ae70463ff21155c447")
+                .appendQueryParameter("api_key",Data.API_KEY)
                 .appendQueryParameter(LANGUAJE, languaje);
         Uri movieUrl = builder.build();
         try{
