@@ -82,27 +82,27 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         movieRecyclerView.setAdapter(movieAdapter);
         preferece= PreferenceManager.getDefaultSharedPreferences(this);
 
-        if(Commons.isConnected(this)){
-            initLoader();
-        }else{
-            showError(getString(R.string.errorMessage_noInternetConnection));
-        }
+        initLoader();
     }
 
     private void initLoader(){
-        Loader<Object> searchLoader = loaderManager.getLoader(MOVIE_LOADER);
+        if(Commons.isConnected(this)){
+            Loader<Object> searchLoader = loaderManager.getLoader(MOVIE_LOADER);
 
-        String filter = preferece.getString(SORT_BY, DEFAULT_FILTRER);
-        String languaje = getString(R.string.languaje);
-        URL url = NetworkUtil.createUrl(filter,languaje);
+            String filter = preferece.getString(SORT_BY, DEFAULT_FILTRER);
+            String languaje = getString(R.string.languaje);
+            URL url = NetworkUtil.createUrl(filter,languaje);
 
-        Bundle bundle = new Bundle();
-        bundle.putString(MOVIE_URL, url.toString());
+            Bundle bundle = new Bundle();
+            bundle.putString(MOVIE_URL, url.toString());
 
-        if(searchLoader ==null){
-            loaderManager.initLoader(MOVIE_LOADER,bundle, this);
-        }else{
-            loaderManager.restartLoader(MOVIE_LOADER,bundle, this);
+            if(searchLoader ==null){
+                loaderManager.initLoader(MOVIE_LOADER,bundle, this);
+            }else{
+                loaderManager.restartLoader(MOVIE_LOADER,bundle, this);
+            }
+        }else {
+            showError(getString(R.string.errorMessage_noInternetConnection));
         }
     }
     private void showProgress(){
@@ -201,12 +201,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     }
 
     public void reload(View view) {
-        showProgress();
-        if(Commons.isConnected(this)){
-            initLoader();
-        }else{
-            showError(getString(R.string.errorMessage_noInternetConnection));
-        }
+        initLoader();
     }
 
     public abstract class MovieLoader extends AsyncTaskLoader<ArrayList<Movie>>{
