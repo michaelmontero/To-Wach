@@ -17,13 +17,17 @@
     <string name="rating">Valoracion</string>
     <string name="popular">Popularity</string>
     <string name="refresh_button">Refresh</string>
+    <string name="upcoming_title">Upcoming</string>
+    <string name="filter_upcoming_value">upcoming</string>
     <string-array name="key">
         <item>@string/rating</item>
         <item>@string/popular</item>
+        <item>@string/upcoming_title</item>
     </string-array>
 
     <string-array name="valor">
         <item>@string/filter_top_rated</item>
         <item>@string/filter_popularity</item>
+        <item>@string/filter_upcoming_value</item>
     </string-array>
 </resources>

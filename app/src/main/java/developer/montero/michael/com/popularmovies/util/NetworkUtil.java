@@ -23,9 +23,6 @@ public class NetworkUtil {
 
     private static final String BASE_URL = "http://api.themoviedb.org/3/movie/";
 
-    private final static String UPCOMING = "upcoming";
-    private final static String POPULARIRTY = "popular";
-    private final static String TOP_RATED = "top_rated";
     private final static String LANGUAJE = "language";
 
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
