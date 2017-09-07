@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     private AlertDialog alertDialog;
     private static final String SORT_BY = "SORT_BY";
     private static final int MOVIE_LOADER = 22;
+    private Button refreshButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         setSupportActionBar(toolbar);
 
         loaderManager = getLoaderManager();
+
+        refreshButton = (Button) findViewById(R.id.refreshButton);
 
         movieAdapter = new MovieAdapter(this, null, this);
 
@@ -103,14 +107,19 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     }
     private void showProgress(){
         progressBar.setVisibility(View.VISIBLE);
+        tvErrorMessage.setVisibility(View.INVISIBLE);
         movieRecyclerView.setVisibility(View.INVISIBLE);
+        refreshButton.setVisibility(View.INVISIBLE);
     }
     private void showData(){
         progressBar.setVisibility(View.INVISIBLE);
+        refreshButton.setVisibility(View.INVISIBLE);
+        tvErrorMessage.setVisibility(View.INVISIBLE);
         movieRecyclerView.setVisibility(View.VISIBLE);
     }
     private void showError(String text){
         progressBar.setVisibility(View.INVISIBLE);
+        refreshButton.setVisibility(View.VISIBLE);
         movieRecyclerView.setVisibility(View.INVISIBLE);
         tvErrorMessage.setVisibility(View.VISIBLE);
         tvErrorMessage.setText(text);
@@ -189,6 +198,15 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         });
         alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public void reload(View view) {
+        showProgress();
+        if(Commons.isConnected(this)){
+            initLoader();
+        }else{
+            showError(getString(R.string.errorMessage_noInternetConnection));
+        }
     }
 
     public abstract class MovieLoader extends AsyncTaskLoader<ArrayList<Movie>>{

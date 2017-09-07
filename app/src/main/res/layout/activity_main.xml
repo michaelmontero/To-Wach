@@ -18,7 +18,7 @@ android:layout_height="match_parent"
   android:layout_height="wrap_content"
   android:padding="16dp"
   android:layout_marginTop="55dp"
-
+  android:textColor="@color/textColor"
   android:textSize="20sp"
   android:visibility="invisible" />
  <ProgressBar
@@ -27,6 +27,15 @@ android:layout_height="match_parent"
      android:layout_width="42dp"
      android:layout_gravity="center"
      android:visibility="invisible" />
+
+ <Button
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:id="@+id/refreshButton"
+     android:onClick="reload"
+     android:layout_gravity="center"
+     android:visibility="invisible"
+     android:text="@string/refresh_button"/>
 
 </FrameLayout>
 

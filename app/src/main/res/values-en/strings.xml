@@ -16,7 +16,7 @@
     <string name="languaje">en</string>
     <string name="rating">Valoracion</string>
     <string name="popular">Popularity</string>
-
+    <string name="refresh_button">Refresh</string>
     <string-array name="key">
         <item>@string/rating</item>
         <item>@string/popular</item>
