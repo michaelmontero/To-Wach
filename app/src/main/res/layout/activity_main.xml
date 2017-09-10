@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
     android:background="@color/colorSecundary">
@@ -36,6 +37,15 @@ android:layout_height="match_parent"
      android:layout_gravity="center"
      android:visibility="invisible"
      android:text="@string/refresh_button"/>
+
+ <!--Todo: Replace the test key-->
+ <com.google.android.gms.ads.AdView
+     android:id="@+id/adView"
+     android:layout_width="match_parent"
+     android:layout_gravity="bottom"
+     android:layout_height="wrap_content"
+     ads:adSize="BANNER"
+     ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
 
 </FrameLayout>
 

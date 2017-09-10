@@ -15,12 +15,18 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import org.json.JSONException;
 
@@ -32,6 +38,7 @@ import developer.montero.michael.com.popularmovies.adapter.MovieAdapter;
 import developer.montero.michael.com.popularmovies.interfaces.MovieClickListener;
 import developer.montero.michael.com.popularmovies.model.Movie;
 import developer.montero.michael.com.popularmovies.util.Commons;
+import developer.montero.michael.com.popularmovies.util.Data;
 import developer.montero.michael.com.popularmovies.util.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MovieClickListener, LoaderManager.LoaderCallbacks<ArrayList<Movie>> {
@@ -49,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     private static final String SORT_BY = "SORT_BY";
     private static final int MOVIE_LOADER = 22;
     private Button refreshButton;
-
+    private AdView mAdView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +90,12 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         preferece= PreferenceManager.getDefaultSharedPreferences(this);
 
         initLoader();
+
+        //Todo: Replace the test case
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     private void initLoader(){
