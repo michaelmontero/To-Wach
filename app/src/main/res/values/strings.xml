@@ -11,7 +11,7 @@
     <string name="errorMessage_noInternetConnection">No se ha detectado conexion a internet...favor verificar.</string>
     <string name="detail_movieRating">%.2f/10</string>
     <string name="movie_information">Informacion general</string>
-    <string name="detail_release_date">Fecha de publicacion</string>
+    <string name="detail_release_date">Fecha de publicacion:</string>
     <string name="rating">Valoracion</string>
     <string name="popular">Popularidad</string>
     <string name="languaje">es</string>

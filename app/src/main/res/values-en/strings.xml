@@ -12,7 +12,7 @@
     <string name="errorMessage_noInternetConnection">No internet connection detected ... please check.</string>
     <string name="detail_movieRating">%.2f/10</string>
     <string name="movie_information">General informaction</string>
-    <string name="detail_release_date">Release date</string>
+    <string name="detail_release_date">Release date:</string>
     <string name="languaje">en</string>
     <string name="rating">Valoracion</string>
     <string name="popular">Popularity</string>
