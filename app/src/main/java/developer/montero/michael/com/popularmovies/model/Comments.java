@@ -5,16 +5,15 @@ package developer.montero.michael.com.popularmovies.model;
  */
 
 public class Comments {
-    private int id;
-    private String author, comment;
+    private String id,author, comment;
 
-    public Comments(int id, String author, String comment) {
+    public Comments(String id, String author, String comment) {
         this.id = id;
         this.author = author;
         this.comment = comment;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

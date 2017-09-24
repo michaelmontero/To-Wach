@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import developer.montero.michael.com.popularmovies.model.Comments;
 import developer.montero.michael.com.popularmovies.model.Movie;
 
 /**
@@ -116,5 +117,21 @@ public class NetworkUtil {
             movies.add(new Movie(idMovie,movieTitle,movieImg,synopsis,userRating, releaseDate,popularity,null,null));
         }
         return movies;
+    }
+
+    public ArrayList<Comments> convertJsonToCommentList(String commentJson) throws JSONException {
+        JSONObject jsonObject = new JSONObject(commentJson);
+        JSONArray jsonArray = jsonObject.getJSONArray("results");
+        ArrayList<Comments> commentsArrayList = new ArrayList<>();
+        for(int x=0;x<jsonArray.length();x++){
+            JSONObject comments = jsonArray.getJSONObject(x);
+
+            String movieId = comments.getString("id");
+            String author = comments.getString("author");
+            String content = comments.getString("content");
+
+            commentsArrayList.add(new Comments(movieId,author,content));
+        }
+        return commentsArrayList;
     }
 }
