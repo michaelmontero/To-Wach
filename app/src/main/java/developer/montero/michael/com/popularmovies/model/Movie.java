@@ -1,5 +1,7 @@
 package developer.montero.michael.com.popularmovies.model;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -14,7 +16,7 @@ public class Movie implements Serializable{
     private ArrayList<String> videosUrls;
     private ArrayList<Comments> comments;
 
-    public Movie(int id,String title, String image, String synopsis, Double rating, String releaseDate, int popularity,ArrayList<String> videosUrls) {
+    public Movie(int id,String title, String image, String synopsis, Double rating, String releaseDate, int popularity,ArrayList<String> videosUrls,ArrayList<Comments> comments) {
         this.title = title;
         this.image = image;
         this.synopsis = synopsis;
@@ -23,6 +25,7 @@ public class Movie implements Serializable{
         this.id = id;
         this.popularity = popularity;
         this.videosUrls = videosUrls;
+        this.comments = comments;
     }
 
     public String getTitle() {
@@ -55,5 +58,12 @@ public class Movie implements Serializable{
 
     public ArrayList<String> getUrls(){
         return videosUrls;
+    }
+    public ArrayList<Comments> getComments(){return comments;}
+    public void setComments(ArrayList<Comments> mComments){
+        comments = mComments;
+    }
+    public void setVideosUrls(ArrayList<String> mVideoUrls){
+        videosUrls = mVideoUrls;
     }
 }

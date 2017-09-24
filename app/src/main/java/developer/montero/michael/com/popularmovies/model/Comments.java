@@ -4,7 +4,7 @@ package developer.montero.michael.com.popularmovies.model;
  * Created by Michael A. Montero on 23/09/2017.
  */
 
-class Comments {
+public class Comments {
     private int id;
     private String author, comment;
 
