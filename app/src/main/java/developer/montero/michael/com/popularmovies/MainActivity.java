@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,9 +22,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -41,7 +39,6 @@ import developer.montero.michael.com.popularmovies.interfaces.LoadMoreListener;
 import developer.montero.michael.com.popularmovies.interfaces.MovieClickListener;
 import developer.montero.michael.com.popularmovies.model.Movie;
 import developer.montero.michael.com.popularmovies.util.Commons;
-import developer.montero.michael.com.popularmovies.util.Data;
 import developer.montero.michael.com.popularmovies.util.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MovieClickListener, LoaderManager.LoaderCallbacks<ArrayList<Movie>> {
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     public ProgressBar progressBar;
     private TextView tvErrorMessage;
     private SharedPreferences preferece;
-    private String DEFAULT_FILTRER = null;
+    private String DEFAULT_FILTER;
     private LoaderManager loaderManager;
     private AlertDialog alertDialog;
     private static final String SORT_BY = "SORT_BY";
@@ -62,12 +59,14 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     private Button refreshButton;
     private AdView mAdView;
     static int pageNumber = 0;
+    private static final String SELECTED_FILTER = "selectedFilter";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DEFAULT_FILTRER = getString(R.string.filter_popularity);
+        DEFAULT_FILTER = getString(R.string.filter_popularity);
 
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         tvErrorMessage = (TextView)findViewById(R.id.tv_errorMessage);
@@ -124,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
             pageNumber += 1;
             Loader<Object> searchLoader = loaderManager.getLoader(MOVIE_LOADER);
 
-            String filter = preferece.getString(SORT_BY, DEFAULT_FILTRER);
+            String filter = preferece.getString(SORT_BY, DEFAULT_FILTER);
             String languaje = getString(R.string.languaje);
             URL url = NetworkUtil.createUrl(filter,languaje,pageNumber);
 
@@ -211,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_setting:
-                int selected = preferece.getInt("selectedFilter", -1);
+                int selected = preferece.getInt(SELECTED_FILTER, -1);
                 showSortDialog(selected);
                 break;
         }
@@ -229,10 +228,10 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
 
                 SharedPreferences.Editor editor = preferece.edit();
                 editor.putString(SORT_BY, filterValues[index]);
-                editor.putInt("selectedFilter", index);
+                editor.putInt(SELECTED_FILTER, index);
                 editor.apply();
 
-                int oldFilterIndex = preferece.getInt("selectedFilter", 1);
+                int oldFilterIndex = preferece.getInt(SELECTED_FILTER, 1);
 
                 //If select new filter choise then reset the page number and the data
                 if(index == oldFilterIndex){
@@ -271,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
 
         @Override
         public ArrayList<Movie> loadInBackground() {
-            Log.i(TAG,pageNumber+"");
             ArrayList<Movie> mMovie = null;
             try {
                 String movies = NetworkUtil.getMovies(param);
