@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -35,6 +37,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import developer.montero.michael.com.popularmovies.adapter.MovieAdapter;
+import developer.montero.michael.com.popularmovies.interfaces.LoadMoreListener;
 import developer.montero.michael.com.popularmovies.interfaces.MovieClickListener;
 import developer.montero.michael.com.popularmovies.model.Movie;
 import developer.montero.michael.com.popularmovies.util.Commons;
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     private static final int MOVIE_LOADER = 22;
     private Button refreshButton;
     private AdView mAdView;
+    static int pageNumber = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
 
         refreshButton = (Button) findViewById(R.id.refreshButton);
 
-        movieAdapter = new MovieAdapter(this, null, this);
+
 
         movieRecyclerView = (RecyclerView)findViewById(R.id.main_movie_recyclerview);
         GridLayoutManager layoutManager;
@@ -86,10 +90,26 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         movieRecyclerView.setLayoutManager(layoutManager);
         movieRecyclerView.setHasFixedSize(true);
 
+        movieAdapter = new MovieAdapter(this,movieRecyclerView, null, this);
+
         movieRecyclerView.setAdapter(movieAdapter);
         preferece= PreferenceManager.getDefaultSharedPreferences(this);
 
+        showProgress();
         initLoader();
+
+        movieAdapter.setLoadMoreListener(new LoadMoreListener() {
+            @Override
+            public void onLoadMoreListener() {
+                if(movieArrayList.size() == 20){
+                    Toast.makeText(MainActivity.this, "Loading data completed", Toast.LENGTH_SHORT).show();
+                    initLoader();
+                } else {
+                    //Toast.makeText(MainActivity.this, "Loading data completed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         //Todo: Replace the test case
         MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
@@ -98,13 +118,15 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         mAdView.loadAd(adRequest);
     }
 
+
     private void initLoader(){
         if(Commons.isConnected(this)){
+            pageNumber += 1;
             Loader<Object> searchLoader = loaderManager.getLoader(MOVIE_LOADER);
 
             String filter = preferece.getString(SORT_BY, DEFAULT_FILTRER);
             String languaje = getString(R.string.languaje);
-            URL url = NetworkUtil.createUrl(filter,languaje);
+            URL url = NetworkUtil.createUrl(filter,languaje,pageNumber);
 
             Bundle bundle = new Bundle();
             bundle.putString(MOVIE_URL, url.toString());
@@ -157,8 +179,12 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     @Override
     public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> data) {
         showData();
-        movieArrayList = data;
-        movieAdapter.swapMovies(data);
+        if(movieArrayList != null && movieArrayList.size() > 0){
+            movieArrayList.addAll(data);
+        }else{
+            movieArrayList = data;
+        }
+        movieAdapter.swapMovies(movieArrayList);
     }
 
     @Override
@@ -205,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
                 editor.putInt("selectedFilter", index);
                 editor.apply();
 
+                showProgress();
                 initLoader();
                 alertDialog.cancel();
             }
@@ -214,13 +241,13 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     }
 
     public void reload(View view) {
+        showProgress();
         initLoader();
     }
 
     public abstract class MovieLoader extends AsyncTaskLoader<ArrayList<Movie>>{
 
         private URL param;
-        private ArrayList<Movie> movieArrayList;
         public MovieLoader(Context context,URL param) {
             super(context);
             this.param = param;
@@ -229,24 +256,23 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         @Override
         protected void onStartLoading() {
             super.onStartLoading();
-            showProgress();
             forceLoad();
         }
 
         @Override
         public ArrayList<Movie> loadInBackground() {
+            Log.i("PAGE",pageNumber+"");
+            ArrayList<Movie> mMovie = null;
             try {
                 String movies = NetworkUtil.getMovies(param);
                 if(movies != null){
-                    movieArrayList = NetworkUtil.convertJsonToMovieList(movies);
+                    mMovie = NetworkUtil.convertJsonToMovieList(movies);
                 }
             } catch (IOException | JSONException e) {
-                showError(getString(R.string.errorMessage_unespexted));
-                movieArrayList = null;
                 e.printStackTrace();
             }
-            return movieArrayList;
+            movieAdapter.setLoaded();
+            return mMovie;
         }
     }
-
 }

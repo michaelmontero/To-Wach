@@ -28,12 +28,13 @@ public class NetworkUtil {
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_SIZE = "w185";
 
-    public static URL createUrl(String sortBy, String languaje){
+    public static URL createUrl(String sortBy, String languaje, int page){
         URL url = null;
         Uri.Builder builder = Uri.parse(BASE_URL)
                 .buildUpon()
                 .appendPath(sortBy)
                 .appendQueryParameter("api_key",Data.API_KEY)
+                .appendQueryParameter("page",String.valueOf(page))
                 .appendQueryParameter(LANGUAJE, languaje);
         Uri movieUrl = builder.build();
         try{
