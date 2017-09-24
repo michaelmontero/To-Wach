@@ -33,7 +33,6 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
     private LoadMoreListener loadMoreListener;
-    private RecyclerView recyclerView;
     private int totalItemCount = 0;
     private int lastVisibleItem = 0;
     private boolean isLoading;
@@ -41,7 +40,6 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public MovieAdapter(Context context,RecyclerView recyclerView, ArrayList<Movie> movies, MovieClickListener movieClickListener) {
         this.context = context;
         this.movies = movies;
-        this.recyclerView = recyclerView;
         this.movieClickListener = movieClickListener;
 
 
@@ -114,13 +112,14 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void swapMovies(ArrayList<Movie> mMovies){
-        if(movies != null && movies.size() >0){
+        if(movies != null && movies.size() >0 && mMovies != null){
             movies.addAll(mMovies);
         }else{
             movies = mMovies;
         }
         notifyDataSetChanged();
     }
+
 
     public class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView movieImage;

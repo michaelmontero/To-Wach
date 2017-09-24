@@ -45,6 +45,7 @@ import developer.montero.michael.com.popularmovies.util.Data;
 import developer.montero.michael.com.popularmovies.util.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MovieClickListener, LoaderManager.LoaderCallbacks<ArrayList<Movie>> {
+    private static final String TAG = MainActivity.class.getName();
     final static String MOVIE = "movie";
     private static final String MOVIE_URL = "MOVIE_URL";
     private MovieAdapter movieAdapter;
@@ -101,11 +102,10 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         movieAdapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void onLoadMoreListener() {
-                if(movieArrayList.size() == 20){
-                    Toast.makeText(MainActivity.this, "Loading data completed", Toast.LENGTH_SHORT).show();
+                int size = movieArrayList.size();
+                if(size % 20 == 0){
+                    Log.i(TAG, "Loading more data..");
                     initLoader();
-                } else {
-                    //Toast.makeText(MainActivity.this, "Loading data completed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         }else{
             movieArrayList = data;
         }
+        Log.i(TAG, movieArrayList.size()+"");
         movieAdapter.swapMovies(movieArrayList);
     }
 
@@ -217,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         return true;
     }
 
-    private void showSortDialog(int selected){
+    private void showSortDialog(final int selected){
         String [] filterOptions = getResources().getStringArray(R.array.key);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.preference_filter_title));
@@ -230,6 +231,15 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
                 editor.putString(SORT_BY, filterValues[index]);
                 editor.putInt("selectedFilter", index);
                 editor.apply();
+
+                int oldFilterIndex = preferece.getInt("selectedFilter", 1);
+
+                //If select new filter choise then reset the page number and the data
+                if(index == oldFilterIndex){
+                    pageNumber = 0;
+                    movieArrayList.clear();
+                    movieAdapter.swapMovies(null);
+                }
 
                 showProgress();
                 initLoader();
@@ -261,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
 
         @Override
         public ArrayList<Movie> loadInBackground() {
-            Log.i("PAGE",pageNumber+"");
+            Log.i(TAG,pageNumber+"");
             ArrayList<Movie> mMovie = null;
             try {
                 String movies = NetworkUtil.getMovies(param);
