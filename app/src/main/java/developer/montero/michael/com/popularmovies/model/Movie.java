@@ -1,6 +1,7 @@
 package developer.montero.michael.com.popularmovies.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Michael Montero on 25-Aug-17.
@@ -8,13 +9,12 @@ import java.io.Serializable;
 
 public class Movie implements Serializable{
     private String title,image,synopsis,releaseDate;
-    int id,popularity;
-    Double rating;
+    private int id,popularity;
+    private Double rating;
+    private ArrayList<String> videosUrls;
+    private ArrayList<Comments> comments;
 
-    public Movie(){
-
-    }
-    public Movie(int id,String title, String image, String synopsis, Double rating, String releaseDate, int popularity) {
+    public Movie(int id,String title, String image, String synopsis, Double rating, String releaseDate, int popularity,ArrayList<String> videosUrls) {
         this.title = title;
         this.image = image;
         this.synopsis = synopsis;
@@ -22,6 +22,7 @@ public class Movie implements Serializable{
         this.releaseDate = releaseDate;
         this.id = id;
         this.popularity = popularity;
+        this.videosUrls = videosUrls;
     }
 
     public String getTitle() {
@@ -50,5 +51,9 @@ public class Movie implements Serializable{
 
     public int getPopularity() {
         return popularity;
+    }
+
+    public ArrayList<String> getUrls(){
+        return videosUrls;
     }
 }
