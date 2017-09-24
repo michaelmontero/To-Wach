@@ -119,7 +119,7 @@ public class NetworkUtil {
         return movies;
     }
 
-    public ArrayList<Comments> convertJsonToCommentList(String commentJson) throws JSONException {
+    public static ArrayList<Comments> convertJsonToCommentList(String commentJson) throws JSONException {
         JSONObject jsonObject = new JSONObject(commentJson);
         JSONArray jsonArray = jsonObject.getJSONArray("results");
         ArrayList<Comments> commentsArrayList = new ArrayList<>();

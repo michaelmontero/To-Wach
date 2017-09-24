@@ -12,6 +12,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
@@ -21,9 +23,12 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+
 import java.net.URL;
 import java.util.ArrayList;
 
+import developer.montero.michael.com.popularmovies.adapter.CommentAdapter;
 import developer.montero.michael.com.popularmovies.loader.DataLoader;
 import developer.montero.michael.com.popularmovies.model.Comments;
 import developer.montero.michael.com.popularmovies.model.Movie;
@@ -39,6 +44,9 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     private static final int COMMENT_LOADER = 10;
     private LoaderManager loaderManager;
     private static final String TAG = DetailActivity.class.getName();
+    private ArrayList<Comments> comments;
+    private RecyclerView recyclerView;
+    private CommentAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +60,14 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("");
         }
+
+        recyclerView = (RecyclerView)findViewById(R.id.comments_recycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new CommentAdapter(this,null);
+        recyclerView.setAdapter(adapter);
+
 
         Bundle bundle = getIntent().getExtras();
         if(bundle.containsKey(MainActivity.MOVIE)){
@@ -140,6 +156,12 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
+        try {
+            comments=NetworkUtil.convertJsonToCommentList(data);
+            adapter.refreshData(comments);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         Log.e(TAG,data);
     }
 

@@ -3,11 +3,14 @@ package developer.montero.michael.com.popularmovies.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import developer.montero.michael.com.popularmovies.R;
 import developer.montero.michael.com.popularmovies.model.Comments;
 
 /**
@@ -25,12 +28,21 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
     @Override
     public CommentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view =inflater.inflate(R.layout.comment_adapter, parent,false);
+        return new CommentHolder(view);
     }
 
     @Override
     public void onBindViewHolder(CommentHolder holder, int position) {
+        Comments comment = comments.get(position);
+        holder.author.setText(comment.getAuthor());
+        holder.comment.setText(comment.getComment());
+    }
 
+    public void refreshData(ArrayList<Comments> comments){
+        this.comments = comments;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -39,8 +51,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     }
 
     public class CommentHolder extends ViewHolder{
+        TextView author,comment;
         public CommentHolder(View itemView) {
             super(itemView);
+            author = (TextView)itemView.findViewById(R.id.author);
+            comment = (TextView)itemView.findViewById(R.id.comment);
         }
     }
 }
