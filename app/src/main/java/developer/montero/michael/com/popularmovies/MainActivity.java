@@ -2,8 +2,6 @@ package developer.montero.michael.com.popularmovies;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.AsyncTaskLoader;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
@@ -30,18 +28,18 @@ import com.google.android.gms.ads.MobileAds;
 
 import org.json.JSONException;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import developer.montero.michael.com.popularmovies.adapter.MovieAdapter;
 import developer.montero.michael.com.popularmovies.interfaces.LoadMoreListener;
 import developer.montero.michael.com.popularmovies.interfaces.MovieClickListener;
+import developer.montero.michael.com.popularmovies.loader.DataLoader;
 import developer.montero.michael.com.popularmovies.model.Movie;
 import developer.montero.michael.com.popularmovies.util.Commons;
 import developer.montero.michael.com.popularmovies.util.NetworkUtil;
 
-public class MainActivity extends AppCompatActivity implements MovieClickListener, LoaderManager.LoaderCallbacks<ArrayList<Movie>> {
+public class MainActivity extends AppCompatActivity implements MovieClickListener, LoaderManager.LoaderCallbacks<String> {
     private static final String TAG = MainActivity.class.getName();
     final static String MOVIE = "movie";
     private static final String MOVIE_URL = "MOVIE_URL";
@@ -101,10 +99,12 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         movieAdapter.setLoadMoreListener(new LoadMoreListener() {
             @Override
             public void onLoadMoreListener() {
-                int size = movieArrayList.size();
-                if(size % 20 == 0){
-                    Log.i(TAG, "Loading more data..");
-                    initLoader();
+                if(movieArrayList != null){
+                    int size = movieArrayList.size();
+                    if(size % 20 == 0){
+                        Log.i(TAG, "Loading more data..");
+                        initLoader();
+                    }
                 }
             }
         });
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
 
             String filter = preferece.getString(SORT_BY, DEFAULT_FILTER);
             String languaje = getString(R.string.languaje);
-            URL url = NetworkUtil.createUrl(filter,languaje,pageNumber);
+            URL url = NetworkUtil.createUrl(0,filter,languaje,pageNumber);
 
             Bundle bundle = new Bundle();
             bundle.putString(MOVIE_URL, url.toString());
@@ -160,12 +160,12 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     }
 
     @Override
-    public Loader<ArrayList<Movie>> onCreateLoader(int id, Bundle args) {
+    public Loader<String> onCreateLoader(int id, Bundle args) {
         try{
                URL url =new URL(args.getString(MOVIE_URL));
-               return new MovieLoader(this, url) {
+               return new DataLoader(this, url) {
                     @Override
-                    public ArrayList<Movie> loadInBackground() {
+                    public String loadInBackground() {
                         return super.loadInBackground();
                     }
                };
@@ -176,19 +176,25 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> data) {
+    public void onLoadFinished(Loader<String> loader, String data) {
         showData();
-        if(movieArrayList != null && movieArrayList.size() > 0){
-            movieArrayList.addAll(data);
-        }else{
-            movieArrayList = data;
+        try {
+            ArrayList<Movie> mData = NetworkUtil.convertJsonToMovieList(data);
+            if(movieArrayList != null && movieArrayList.size() > 0 && mData != null){
+                movieArrayList.addAll(mData);
+            }else{
+                movieArrayList = mData;
+            }
+            Log.i(TAG, movieArrayList.size()+"");
+            movieAdapter.swapMovies(movieArrayList);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        Log.i(TAG, movieArrayList.size()+"");
-        movieAdapter.swapMovies(movieArrayList);
+
     }
 
     @Override
-    public void onLoaderReset(Loader<ArrayList<Movie>> loader) {
+    public void onLoaderReset(Loader<String> loader) {
         movieAdapter.swapMovies(null);
     }
 
@@ -254,33 +260,5 @@ public class MainActivity extends AppCompatActivity implements MovieClickListene
         initLoader();
     }
 
-    public abstract class MovieLoader extends AsyncTaskLoader<ArrayList<Movie>>{
 
-        private URL param;
-        public MovieLoader(Context context,URL param) {
-            super(context);
-            this.param = param;
-        }
-
-        @Override
-        protected void onStartLoading() {
-            super.onStartLoading();
-            forceLoad();
-        }
-
-        @Override
-        public ArrayList<Movie> loadInBackground() {
-            ArrayList<Movie> mMovie = null;
-            try {
-                String movies = NetworkUtil.getMovies(param);
-                if(movies != null){
-                    mMovie = NetworkUtil.convertJsonToMovieList(movies);
-                }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-            movieAdapter.setLoaded();
-            return mMovie;
-        }
-    }
 }

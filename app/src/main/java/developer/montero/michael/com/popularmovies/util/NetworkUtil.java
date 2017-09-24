@@ -28,11 +28,15 @@ public class NetworkUtil {
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_SIZE = "w185";
 
-    public static URL createUrl(String sortBy, String languaje, int page){
+    public static URL createUrl(int movieId,String sortBy, String languaje, int page){
         URL url = null;
         Uri.Builder builder = Uri.parse(BASE_URL)
-                .buildUpon()
-                .appendPath(sortBy)
+                .buildUpon();
+
+                if(movieId != 0){
+                    builder.appendPath(String.valueOf(movieId));
+                }
+                builder.appendPath(sortBy)
                 .appendQueryParameter("api_key",Data.API_KEY)
                 .appendQueryParameter("page",String.valueOf(page))
                 .appendQueryParameter(LANGUAJE, languaje);
@@ -68,7 +72,7 @@ public class NetworkUtil {
      * @return The contents of the HTTP response.
      * @throws IOException Related to network and stream reading
      */
-    public static String getMovies(URL url) throws IOException {
+    public static String getData(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = urlConnection.getInputStream();
@@ -109,7 +113,7 @@ public class NetworkUtil {
             Double userRating = movie.getDouble("vote_average");
             int popularity = movie.getInt("popularity");
 
-            movies.add(new Movie(idMovie,movieTitle,movieImg,synopsis,userRating, releaseDate,popularity));
+            movies.add(new Movie(idMovie,movieTitle,movieImg,synopsis,userRating, releaseDate,popularity,null,null));
         }
         return movies;
     }
